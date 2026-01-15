@@ -26,19 +26,21 @@ export default async function Header() {
     <header className="fixed top-0 w-full border-b bg-background/80 backdrop-blur-md z-50 supports-[backdrop-filter]:bg-background/60">
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/">
-          <Image
-            src={"/logo.png"}
-            alt="Sensai Logo"
-            width={200}
-            height={60}
-            className="h-12 py-1 w-auto object-contain"
-          />
+          <div className="h-12 w-25 overflow-hidden flex items-center justify-center bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 rounded border border-border/50">
+            <Image
+              src={"/logo.png"}
+              alt="Sensai Logo"
+              width={96}
+              height={48}
+              className="h-full w-full object-cover"
+            />
+          </div>
         </Link>
 
         {/* Action Buttons */}
         <div className="flex items-center space-x-2 md:space-x-4">
           <SignedIn>
-            <Link href="/dashboard">
+            <Link href={`/dashboard?refresh=${Date.now()}`}>
               <Button
                 variant="outline"
                 className="hidden md:inline-flex items-center gap-2"
