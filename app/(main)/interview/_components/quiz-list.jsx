@@ -16,8 +16,10 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import QuizResult from "./quiz-result";
+import ReactMarkdown from 'react-markdown';
 
 export default function QuizList({ assessments }) {
   const router = useRouter();
@@ -29,7 +31,7 @@ export default function QuizList({ assessments }) {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="gradient-title text-3xl md:text-4xl">
+              <CardTitle className="hero-gradient-cyber animate-gradient text-transparent bg-clip-text text-3xl md:text-4xl leading-[1.25] mb-4 overflow-visible">
                 Recent Quizzes
               </CardTitle>
               <CardDescription>
@@ -43,43 +45,53 @@ export default function QuizList({ assessments }) {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {assessments?.map((assessment, i) => (
-              <Card
-                key={assessment.id}
-                className="cursor-pointer hover:bg-muted/50 transition-colors"
-                onClick={() => setSelectedQuiz(assessment)}
-              >
-                <CardHeader>
-                  <CardTitle className="gradient-title text-2xl">
-                    Quiz {i + 1}
-                  </CardTitle>
-                  <CardDescription className="flex justify-between w-full">
-                    <div>Score: {assessment.quizScore.toFixed(1)}%</div>
-                    <div>
-                      {format(
-                        new Date(assessment.createdAt),
-                        "MMMM dd, yyyy HH:mm"
-                      )}
-                    </div>
-                  </CardDescription>
-                </CardHeader>
-                {assessment.improvementTip && (
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground">
-                      {assessment.improvementTip}
-                    </p>
-                  </CardContent>
-                )}
-              </Card>
-            ))}
+            {assessments?.length > 0 ? (
+              assessments.map((assessment, i) => (
+                <Card
+                  key={assessment.id}
+                  className="cursor-pointer hover:bg-muted/50 transition-colors"
+                  onClick={() => setSelectedQuiz(assessment)}
+                >
+                  <CardHeader>
+                    <CardTitle className="gradient-title text-2xl">
+                      Quiz {i + 1}
+                    </CardTitle>
+                    <CardDescription className="flex justify-between w-full">
+                      <div>Score: {assessment.quizScore?.toFixed(1) || 0}%</div>
+                      <div>
+                        {format(
+                          new Date(assessment.createdAt),
+                          "MMMM dd, yyyy HH:mm"
+                        )}
+                      </div>
+                    </CardDescription>
+                  </CardHeader>
+                  {assessment.improvementTip && (
+                    <CardContent>
+                      <ReactMarkdown className="prose prose-invert max-w-none markdown-content text-sm text-muted-foreground">
+                        {assessment.improvementTip}
+                      </ReactMarkdown>
+                    </CardContent>
+                  )}
+                </Card>
+              ))
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <p>No quizzes taken yet.</p>
+                <p className="text-sm">Start your first quiz to see your results here!</p>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
 
-      <Dialog open={!!selectedQuiz} onOpenChange={() => setSelectedQuiz(null)}>
+      <Dialog open={!!selectedQuiz} onOpenChange={setSelectedQuiz}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle></DialogTitle>
+            <DialogTitle>Quiz Details</DialogTitle>
+            <DialogDescription>
+              Review your answers and feedback for this quiz attempt.
+            </DialogDescription>
           </DialogHeader>
           <QuizResult
             result={selectedQuiz}
