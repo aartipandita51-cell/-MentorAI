@@ -119,15 +119,6 @@ export default function LandingPage() {
                 <CardContent className="pt-6">
                   <div className="flex flex-col space-y-4">
                     <div className="flex items-center space-x-4 mb-4">
-                      <div className="relative h-12 w-12 flex-shrink-0">
-                        <Image
-                          width={40}
-                          height={40}
-                          src={testimonial.image}
-                          alt={testimonial.author}
-                          className="rounded-full object-cover border-2 border-primary/20"
-                        />
-                      </div>
                       <div>
                         <p className="font-semibold">{testimonial.author}</p>
                         <p className="text-sm text-muted-foreground">
@@ -195,7 +186,7 @@ export default function LandingPage() {
               Join thousands of professionals who are advancing their careers
               with AI-powered guidance.
             </p>
-            <Link href="/dashboard" passHref>
+            <Link href={`/dashboard?refresh=${Date.now()}`} passHref>
               <Button
                 size="lg"
                 variant="secondary"
