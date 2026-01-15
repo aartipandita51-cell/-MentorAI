@@ -46,9 +46,12 @@ export async function updateUser(data) {
           },
           data: {
             industry: data.industry,
+            subIndustry: data.subIndustry, // <-- now included
             experience: data.experience,
             bio: data.bio,
             skills: data.skills,
+            leetcodeUsername: data.leetcodeUsername, // <-- now included
+            targetRole: data.targetRole, // <-- now included
           },
         });
 
@@ -94,4 +97,28 @@ export async function getUserOnboardingStatus() {
     console.error("Error checking onboarding status:", error);
     throw new Error("Failed to check onboarding status");
   }
+}
+
+export async function getCurrentUser() {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  const user = await db.user.findUnique({
+    where: { clerkUserId: userId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      skills: true,
+      targetRole: true,
+      industry: true,
+      subIndustry: true,         
+      experience: true,
+      bio: true,
+      leetcodeUsername: true, 
+    },
+  });
+
+  if (!user) throw new Error("User not found");
+  return user;
 }
